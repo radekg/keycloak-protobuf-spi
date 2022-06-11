@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package gospi;
+
+option java_package = "keycloak.protobuf.spi.proto";
+option go_package = "github.com/radekg/keycloak-protobuf-spi/gospi";
+
+import "eventlistener/definitions.proto";
+import "shared/shared.proto";
+

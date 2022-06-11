@@ -1,0 +1,172 @@
+syntax = "proto3";
+package gospi.eventlistener;
+
+option java_package = "keycloak.protobuf.spi.eventlistener.proto";
+option go_package = "github.com/radekg/keycloak-protobuf-spi/gospi/eventlistener";
+
+import "shared/shared.proto";
+
+// Regular events
+
+message Event {
+    int64 time = 1;
+    enum EventType {
+        LOGIN = 0;
+        LOGIN_ERROR = 1;
+        REGISTER = 2;
+        REGISTER_ERROR = 3;
+        LOGOUT = 4;
+        LOGOUT_ERROR = 5;
+        CODE_TO_TOKEN = 6;
+        CODE_TO_TOKEN_ERROR = 7;
+        CLIENT_LOGIN = 8;
+        CLIENT_LOGIN_ERROR = 9;
+        REFRESH_TOKEN = 10;
+        REFRESH_TOKEN_ERROR = 11;
+        VALIDATE_ACCESS_TOKEN = 12; /** @deprecated */
+        VALIDATE_ACCESS_TOKEN_ERROR = 13; /** @deprecated */
+        INTROSPECT_TOKEN = 14;
+        INTROSPECT_TOKEN_ERROR = 15;
+        FEDERATED_IDENTITY_LINK = 16;
+        FEDERATED_IDENTITY_LINK_ERROR = 17;
+        REMOVE_FEDERATED_IDENTITY = 18;
+        REMOVE_FEDERATED_IDENTITY_ERROR = 19;
+        UPDATE_EMAIL = 20;
+        UPDATE_EMAIL_ERROR = 21;
+        UPDATE_PROFILE = 22;
+        UPDATE_PROFILE_ERROR = 23;
+        UPDATE_PASSWORD = 24;
+        UPDATE_PASSWORD_ERROR = 25;
+        UPDATE_TOTP = 26;
+        UPDATE_TOTP_ERROR = 27;
+        VERIFY_EMAIL = 28;
+        VERIFY_EMAIL_ERROR = 29;
+        VERIFY_PROFILE = 90; // new in 14.0.0
+        VERIFY_PROFILE_ERROR = 91; // new in 14.0.0
+        REMOVE_TOTP = 30;
+        REMOVE_TOTP_ERROR = 31;
+        GRANT_CONSENT = 32;
+        GRANT_CONSENT_ERROR = 33;
+        UPDATE_CONSENT = 34;
+        UPDATE_CONSENT_ERROR = 35;
+        REVOKE_GRANT = 36;
+        REVOKE_GRANT_ERROR = 37;
+        SEND_VERIFY_EMAIL = 38;
+        SEND_VERIFY_EMAIL_ERROR = 39;
+        SEND_RESET_PASSWORD = 40;
+        SEND_RESET_PASSWORD_ERROR = 41;
+        SEND_IDENTITY_PROVIDER_LINK = 42;
+        SEND_IDENTITY_PROVIDER_LINK_ERROR = 43;
+        RESET_PASSWORD = 44;
+        RESET_PASSWORD_ERROR = 45;
+        RESTART_AUTHENTICATION = 46;
+        RESTART_AUTHENTICATION_ERROR = 47;
+        INVALID_SIGNATURE = 48;
+        INVALID_SIGNATURE_ERROR = 49;
+        REGISTER_NODE = 50;
+        REGISTER_NODE_ERROR = 51;
+        UNREGISTER_NODE = 52;
+        UNREGISTER_NODE_ERROR = 53;
+        USER_INFO_REQUEST = 54;
+        USER_INFO_REQUEST_ERROR = 55;
+        IDENTITY_PROVIDER_LINK_ACCOUNT = 56;
+        IDENTITY_PROVIDER_LINK_ACCOUNT_ERROR = 57;
+        IDENTITY_PROVIDER_LOGIN = 58;
+        IDENTITY_PROVIDER_LOGIN_ERROR = 59;
+        IDENTITY_PROVIDER_FIRST_LOGIN = 60;
+        IDENTITY_PROVIDER_FIRST_LOGIN_ERROR = 61;
+        IDENTITY_PROVIDER_POST_LOGIN = 62;
+        IDENTITY_PROVIDER_POST_LOGIN_ERROR = 63;
+        IDENTITY_PROVIDER_RESPONSE = 64;
+        IDENTITY_PROVIDER_RESPONSE_ERROR = 65;
+        IDENTITY_PROVIDER_RETRIEVE_TOKEN = 66;
+        IDENTITY_PROVIDER_RETRIEVE_TOKEN_ERROR = 67;
+        IMPERSONATE = 68;
+        IMPERSONATE_ERROR = 69;
+        CUSTOM_REQUIRED_ACTION = 70;
+        CUSTOM_REQUIRED_ACTION_ERROR = 71;
+        EXECUTE_ACTIONS = 72;
+        EXECUTE_ACTIONS_ERROR = 73;
+        EXECUTE_ACTION_TOKEN = 74;
+        EXECUTE_ACTION_TOKEN_ERROR = 75;
+        CLIENT_INFO = 76;
+        CLIENT_INFO_ERROR = 77;
+        CLIENT_REGISTER = 78;
+        CLIENT_REGISTER_ERROR = 79;
+        CLIENT_UPDATE = 80;
+        CLIENT_UPDATE_ERROR = 81;
+        CLIENT_DELETE = 82;
+        CLIENT_DELETE_ERROR = 83;
+        CLIENT_INITIATED_ACCOUNT_LINKING = 84;
+        CLIENT_INITIATED_ACCOUNT_LINKING_ERROR = 85;
+        TOKEN_EXCHANGE = 86;
+        TOKEN_EXCHANGE_ERROR = 87;
+        OAUTH2_DEVICE_AUTH = 92; // new in 13.0.0
+        OAUTH2_DEVICE_AUTH_ERROR = 93; // new in 13.0.0
+        OAUTH2_DEVICE_VERIFY_USER_CODE = 94; // new in 13.0.0
+        OAUTH2_DEVICE_VERIFY_USER_CODE_ERROR = 95; // new in 13.0.0
+        OAUTH2_DEVICE_CODE_TO_TOKEN = 96; // new in 13.0.0
+        OAUTH2_DEVICE_CODE_TO_TOKEN_ERROR = 97; // new in 13.0.0
+        AUTHREQID_TO_TOKEN = 98; // new in 13.0.0
+        AUTHREQID_TO_TOKEN_ERROR = 99; // new in 13.0.0
+        PERMISSION_TOKEN = 88;
+        PERMISSION_TOKEN_ERROR = 89;
+        DELETE_ACCOUNT = 100;
+        DELETE_ACCOUNT_ERROR = 101;
+        PUSHED_AUTHORIZATION_REQUEST = 102; // new in 15.0.0
+        PUSHED_AUTHORIZATION_REQUEST_ERROR = 103; // new in 15.0.0
+
+        // maximum enum id: 103
+
+        UNKNOWN = 1000;
+    }
+    EventType type = 2;
+    gospi.shared.NullableString realmId = 3;
+    gospi.shared.NullableString clientId = 4;
+    gospi.shared.NullableString userId = 5;
+    gospi.shared.NullableString sessionId = 6;
+    gospi.shared.NullableString ipAddress = 7;
+    gospi.shared.NullableString error = 8;
+    map<string, string> details = 9;
+}
+
+message EventRequest {
+    Event event = 1;
+}
+
+// Admin events
+
+message AuthDetails {
+    gospi.shared.NullableString realmId = 1;
+    gospi.shared.NullableString clientId = 2;
+    gospi.shared.NullableString userId = 3;
+    gospi.shared.NullableString ipAddress = 4;
+}
+
+message AdminEvent {
+    int64 time = 1;
+    gospi.shared.NullableString realmId = 2;
+    AuthDetails authDetails = 3;
+    gospi.shared.NullableString resourceType = 4;
+    enum OperationType {
+        CREATE = 0;
+        UPDATE = 1;
+        DELETE = 2;
+        ACTION = 3;
+        UNKNOWN = 1000;
+    }
+    OperationType operationType = 5;
+    gospi.shared.NullableString resourcePath = 6;
+    gospi.shared.NullableString representation = 7;
+    gospi.shared.NullableString error = 8;
+}
+
+message AdminEventRequest {
+    AdminEvent adminEvent = 1;
+    bool flag = 2;
+}
+
+service KeycloakEventService {
+    rpc OnAdminEvent(AdminEventRequest) returns (gospi.shared.Empty);
+    rpc OnEvent(EventRequest) returns (gospi.shared.Empty);
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+package gospi.shared;
+
+option java_package = "keycloak.protobuf.spi.shared.proto";
+option go_package = "github.com/radekg/keycloak-protobuf-spi/gospi/shared";
+
+message Empty{}
+
+message NullableString {
+    oneof option {
+        string value = 1;
+        Empty noValue = 2;
+    }
+}
